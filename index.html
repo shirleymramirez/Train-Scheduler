@@ -1,4 +1,5 @@
-<!<!DOCTYPE>
+<!DOCTYPE html>
+
 <html lang="en-us">
 
 <head>
@@ -13,7 +14,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Firebase Reference -->
     <script src="https://www.gstatic.com/firebasejs/4.7.0/firebase.js"></script>
-
 </head>
 
 <body>
@@ -31,7 +31,7 @@
                         <h3 class="panel-title">Current Train Schedule</h3>
                     </div>
                     <!-- Train Schedule Data Section -->
-                    <table class="table">
+                    <table class="table table-hover" id="trainTable">
                         <thead>
                             <tr>
                                 <th>Train Name</th>
@@ -41,20 +41,20 @@
                                 <th>Minutes Away</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="trainTable">
                             <tr>
-                                <td class="trainName">Hankyu</td>
-                                <td class="destination">Kobe</td>
-                                <td class="frequencymin">30</td>
-                                <td class="nextArrival">01:20</td>
-                                <td class="minutesAway">10</td>
+                                <td id="trainNameDisplay">Hankyu</td>
+                                <td id="destinationDisplay">Kobe</td>
+                                <td id="frequencyminDisplay">30</td>
+                                <td id="nextArrivalDisplay">01:20</td>
+                                <td id="minutesAwayDisplay">10</td>
                             </tr>
                             <tr>
-                                <td class="trainName">JR</td>
-                                <td class="destination">Kyushu</td>
-                                <td class="frequencymin">60</td>
-                                <td class="nextArrival">00:50</td>
-                                <td class="minutesAway">50</td>
+                                <td id="trainNameDisplay">Hankyu</td>
+                                <td id="destinationDisplay">Kobe</td>
+                                <td id="frequencyminDisplay">30</td>
+                                <td id="nextArrivalDisplay">01:20</td>
+                                <td id="minutesAwayDisplay">10</td>
                             </tr>
                         </tbody>
                     </table>
@@ -74,19 +74,19 @@
                     <div class="panel-body">
                         <form role="form">
                             <div class="form-group">
-                                <label for="">Train Name</label>
+                                <label for="trainNameInput">Train Name</label>
                                 <input type="text" class="form-control" id="trainNameInput">
                             </div>
                             <div class="form-group">
-                                <label for="">Destination</label>
+                                <label for="destinationInput">Destination</label>
                                 <input type="text" class="form-control" id="destinationInput">
                             </div>
                             <div class="form-group">
-                                <label for="">First Train Time(HH:mm - military time)</label>
+                                <label for="firstTrainTimeInput">First Train Time(HH:mm - military time)</label>
                                 <input type="text" class="form-control" id="firstTrainTimeInput">
                             </div>
                             <div class="form-group">
-                                <label for="">Frequency (min)</label>
+                                <label for="frequencyInput">Frequency (min)</label>
                                 <input type="text" class="form-control" id="frequencyInput">
                             </div>
                             <button type="submit" class="btn btn-primary" id="submitInfo">Submit</button>
@@ -101,6 +101,7 @@
     </div>
     <!-- JavaScript -->
     <script src="./assets/javascript/logic.js"></script>
+
 </body>
 
 </html>
