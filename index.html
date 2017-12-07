@@ -14,6 +14,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Firebase Reference -->
     <script src="https://www.gstatic.com/firebasejs/4.7.0/firebase.js"></script>
+    <!-- Moment.js Reference -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
 </head>
 
 <body>
@@ -21,6 +24,7 @@
         <div class="jumbotron">
             <h1 class="text-center">Anytime is Train Time</h1>
             <h4>Choo Choo. Chee Chee</h4>
+            <h2>Current Time: <span id="currentTime"></span></h2>
         </div>
 
         <!-- Current Train Schedule Section -->
@@ -30,7 +34,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Current Train Schedule</h3>
                     </div>
-                    <!-- Train Schedule Data Section -->
+                    <!-- Train Schedule Data Table Section -->
                     <table class="table table-hover" id="trainTable">
                         <thead>
                             <tr>
@@ -42,13 +46,6 @@
                             </tr>
                         </thead>
                         <tbody id="trainTable">
-                            <tr>
-                                <td id="trainNameDisplay">Hankyu</td>
-                                <td id="destinationDisplay">Kobe</td>
-                                <td id="frequencyminDisplay">30</td>
-                                <td id="nextArrivalDisplay">01:20</td>
-                                <td id="minutesAwayDisplay">10</td>
-                            </tr>
                             <tr>
                                 <td id="trainNameDisplay">Hankyu</td>
                                 <td id="destinationDisplay">Kobe</td>
