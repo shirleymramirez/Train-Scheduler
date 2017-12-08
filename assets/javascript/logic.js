@@ -11,6 +11,12 @@ $(document).ready(function() {
     };
     firebase.initializeApp(config);
 
+    //Run Clock  
+    setInterval(function() {
+        $("#currentTime").text(moment().format("MMMM Do YYYY, h:mm:ss a"));
+    }, 1000);
+
+
     var database = firebase.database();
     console.log("Database: " + database);
 
@@ -55,49 +61,20 @@ $(document).ready(function() {
             var destination = childSnapshot.val().destination;
             var firstTrainTime = childSnapshot.val().firstTrainTime;
             var frequency = parseInt(childSnapshot.val().frequency);
-            console.log("Frequency: " + frequency);
-
-            //get current time in military format
-            var currentTime = moment();
-            // var currentTime = moment().format("MMMM DD YYYY, h:mm:ss a");
-            console.log("CURRENT TIME: " + moment().format("HH:mm"));
-
-            //Change HTML Elements to show current time
-            $("#currentTime").text(currentTime);
-
-            //First Time Converted, subtract 1 year to make sure it is the current time
-            // var firstTimeConverted = moment(firstTrainTime, "HH:mm").subtract(1, "years");
-            var firstTimeConverted = moment(firstTrainTime, "HH:mm").diff(1, "years");
-            console.log("DATE CONVERTED: " + firstTimeConverted);
-
-            // get the converted time from the first train time and store in a variable
-            var trainTime = moment(firstTimeConverted).format("HH:mm");
-            console.log("TRAIN TIME : " + trainTime);
-
-            //DIFFERENCE B/T THE TIMES 
-            // var tConverted = moment(trainTime, 'HH:mm').subtract(1, 'years');
-            var timeConverted = moment(trainTime, "HH:mm").diff(1, "years");
-            var timeDifference = moment().diff(moment(timeConverted), "minutes");
-            console.log("DIFFERENCE IN TIME: " + timeDifference);
-
-            //REMAINDER 
-            var timeRemainder = timeDifference % frequency;
-            console.log("TIME REMAINING: " + timeRemainder);
-
-            //MINUTES UNTIL NEXT TRAIN
+            var firstTimeConverted = moment(firstTrainTime, "HH:mm").subtract(1, "years");
+            var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+            var timeRemainder = diffTime % frequency;
             var minutesAway = frequency - timeRemainder;
-            console.log("MINUTES UNTIL NEXT TRAIN: " + minutesAway);
-
-            //NEXT TRAIN
             var nextTrain = moment().add(minutesAway, "minutes");
-            console.log("ARRIVAL TIME: " + moment(nextTrain).format('HH:mm A'));
+            var nextArrival = moment(nextTrain).format('HH:mm A'); //("HH:MM");
+
 
             // Change HTML Elements to reflect changes on Train Schedule Data Table Section
             $("#trainTable").append(
                 "<tr><td id='trainNameDisplay'>" + trainName +
                 "</td><td id='destinationDisplay'>" + destination +
                 "</td><td id='frequencyminDisplay'>" + frequency + " min " +
-                "</td><td id='Next Arrival'>" + moment(nextTrain).format('LT') +
+                "</td><td id='Next Arrival'>" + nextArrival +
                 "</td><td id='Minutes Away'>" + minutesAway + " minutes away" + "</td></tr>");
 
             // Handle the errors
