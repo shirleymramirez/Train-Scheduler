@@ -11,7 +11,7 @@ $(document).ready(function() {
     };
     firebase.initializeApp(config);
 
-    //Run Clock  
+    //Run Clock 
     setInterval(function() {
         $("#currentTime").text(moment().format("MMMM Do YYYY, h:mm:ss a"));
     }, 1000);
@@ -24,9 +24,10 @@ $(document).ready(function() {
     var destination = "";
     var firstTrainTime = "";
     var frequency = "";
+    var trainIDs = [];
 
     // capture submit button click
-    $("#submitInfo").on("click", function() {
+    $("#submitInfoBtn").on("click", function() {
 
         event.preventDefault();
 
@@ -61,21 +62,34 @@ $(document).ready(function() {
             var destination = childSnapshot.val().destination;
             var firstTrainTime = childSnapshot.val().firstTrainTime;
             var frequency = parseInt(childSnapshot.val().frequency);
-            var firstTimeConverted = moment(firstTrainTime, "HH:mm").subtract(1, "years");
-            var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-            var timeRemainder = diffTime % frequency;
-            var minutesAway = frequency - timeRemainder;
-            var nextTrain = moment().add(minutesAway, "minutes");
-            var nextArrival = moment(nextTrain).format('HH:mm A'); //("HH:MM");
+            var firstTimeConverted = moment(firstTrainTime, "HH:mm");
+            console.log("firstTimeConverted: " + firstTimeConverted);
 
+            var diffTime = moment().diff(moment(firstTimeConverted));
+            var diffTimeInMinutes = moment().diff(moment(firstTimeConverted), "minutes");
+            console.log("diffTime in minute: " + diffTimeInMinutes);
+
+            var timeRemainder = diffTimeInMinutes % frequency;
+            console.log("timeRemainder: " + timeRemainder);
+
+            var minutesAway = frequency - timeRemainder;
+            console.log("minutesAway: " + minutesAway);
+
+            if (diffTimeInMinutes > 0) {
+                var nextTrain = moment(firstTimeConverted + diffTime).add(minutesAway, "minutes");
+                var nextArrival = moment(nextTrain).format("HH:mm A");
+            } else {
+                minutesAway = Math.abs(diffTimeInMinutes);
+                var nextArrival = moment(firstTimeConverted).format("HH:mm A");
+            }
 
             // Change HTML Elements to reflect changes on Train Schedule Data Table Section
             $("#trainTable").append(
                 "<tr><td id='trainNameDisplay'>" + trainName +
                 "</td><td id='destinationDisplay'>" + destination +
-                "</td><td id='frequencyminDisplay'>" + frequency + " min " +
-                "</td><td id='Next Arrival'>" + nextArrival +
-                "</td><td id='Minutes Away'>" + minutesAway + " minutes away" + "</td></tr>");
+                "</td><td id='frequencyminDisplay'>" + "Every " + frequency + " min " +
+                "</td><td id='nextArrivalDisplay'>" + nextArrival +
+                "</td><td id='minutesAwayDisplay'>" + minutesAway + " minutes away" + "</td></tr>");
 
             // Handle the errors
         },
