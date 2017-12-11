@@ -28,9 +28,7 @@ $(document).ready(function() {
     var trainIDs = [];
 
     //------------------ capture submit button click ------------------------------
-    $("#submitInfoBtn").on("click", function() {
-
-        event.preventDefault();
+    $("#inputForm").on("submit", function() {
 
         // storing and retrieving the most recent user.
         trainName = $("#trainNameInput").val().trim();
@@ -44,13 +42,15 @@ $(document).ready(function() {
         console.log("Frequency: " + frequency);
 
         // store initial data to Firebase database.
-        database.ref().push({
-            trainName: trainName,
-            destination: destination,
-            firstTrainTime: firstTrainTime,
-            frequency: frequency,
-            timeAdded: firebase.database.ServerValue.TIMESTAMP
-        });
+        database
+            .ref()
+            .push({
+                trainName: trainName,
+                destination: destination,
+                firstTrainTime: firstTrainTime,
+                frequency: frequency,
+                timeAdded: firebase.database.ServerValue.TIMESTAMP
+            });
         $("input").val("");
         return false;
     });
