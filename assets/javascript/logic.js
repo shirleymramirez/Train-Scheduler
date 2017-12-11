@@ -11,12 +11,13 @@ $(document).ready(function() {
     };
     firebase.initializeApp(config);
 
-    //Run Clock 
+    //------------------ Current Time Update on HTML page --------------------
     setInterval(function() {
         $("#currentTime").text(moment().format("MMMM Do YYYY, h:mm:ss a"));
     }, 1000);
 
 
+    //------------------ Variable Declaration ----------------------------------
     var database = firebase.database();
     console.log("Database: " + database);
 
@@ -26,7 +27,7 @@ $(document).ready(function() {
     var frequency = "";
     var trainIDs = [];
 
-    // capture submit button click
+    //------------------ capture submit button click ------------------------------
     $("#submitInfoBtn").on("click", function() {
 
         event.preventDefault();
@@ -54,47 +55,46 @@ $(document).ready(function() {
         return false;
     });
 
-    // firebase watcher on value event
+    //------------------ firebase watcher on value event ------------------------------
     database.ref().on("child_added", function(childSnapshot) {
 
-            //log everything that's coming out of snapshot
-            var trainName = childSnapshot.val().trainName;
-            var destination = childSnapshot.val().destination;
+            //log everything that's coming out of childSnapshot data
             var firstTrainTime = childSnapshot.val().firstTrainTime;
             var frequency = parseInt(childSnapshot.val().frequency);
             var firstTimeConverted = moment(firstTrainTime, "HH:mm");
-            console.log("firstTimeConverted: " + firstTimeConverted);
 
+            // get the difference in time from first time train arrival
             var diffTime = moment().diff(moment(firstTimeConverted));
+            // diff time in minutes
             var diffTimeInMinutes = moment().diff(moment(firstTimeConverted), "minutes");
-            console.log("diffTime in minute: " + diffTimeInMinutes);
 
+            // get the time Remainder from diff in times and frequency
             var timeRemainder = diffTimeInMinutes % frequency;
-            console.log("timeRemainder: " + timeRemainder);
 
+            // calculate minutes away based from frequency and time remainder
             var minutesAway = frequency - timeRemainder;
-            console.log("minutesAway: " + minutesAway);
 
+            // check next arrival and nextTrain
+            var nextArrival;
             if (diffTimeInMinutes > 0) {
                 var nextTrain = moment(firstTimeConverted + diffTime).add(minutesAway, "minutes");
-                var nextArrival = moment(nextTrain).format("HH:mm A");
+                nextArrival = moment(nextTrain).format("HH:mm A");
             } else {
                 minutesAway = Math.abs(diffTimeInMinutes);
-                var nextArrival = moment(firstTimeConverted).format("HH:mm A");
+                nextArrival = moment(firstTimeConverted).format("HH:mm A");
             }
 
-            // Change HTML Elements to reflect changes on Train Schedule Data Table Section
-            $("#trainTable").append(
-                "<tr><td id='trainNameDisplay'>" + trainName +
-                "</td><td id='destinationDisplay'>" + destination +
-                "</td><td id='frequencyminDisplay'>" + "Every " + frequency + " min " +
-                "</td><td id='nextArrivalDisplay'>" + nextArrival +
-                "</td><td id='minutesAwayDisplay'>" + minutesAway + " minutes away" + "</td></tr>");
-
+            // update HTML train table with new trainName, destination, frequency, nextArrival and minutesAway
+            $("#trainTable").append("<tr><td>" + childSnapshot.val().trainName + "</td>" +
+                "<td>" + childSnapshot.val().destination + "</td>" +
+                "<td>" + "Every " + frequency + " min" + "</td>" +
+                "<td>" + nextArrival + "</td>" +
+                "<td>" + minutesAway + " minutes away" + "</td></tr>");
             // Handle the errors
         },
         function(errorObject) {
             console.log("Errors handled: " + errorObject.code);
         }
     );
+    // -------------------------------------------------------------------------------------------
 });

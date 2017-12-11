@@ -1,33 +1,34 @@
+body {
+    background-image: url(../../assets/images/images.jpeg);
+    background-repeat: repeat;
+    background-size: 100%;
+}
+
+
 /*  Main Header style */
 
 .jumbotron {
-    background-color: #d89191;
-    color: hsl(120, 29%, 92%);
-    /* background-image: url(../../assets/images/train-hack-FB.jpg);
+    color: rgb(118, 210, 13);
+    background-image: url(../../assets/images/train.jpeg);
     background-repeat: no-repeat;
-    background-size: 100% 100%; */
-    -webkit-animation: mymove 5s infinite;
-    animation: mymove 5s infinite;
-}
-
-@-webkit-keyframes mymove {
-    50% {
-        background-color: blue;
-    }
+    background-size: 100%;
 }
 
 h4 {
     text-align: center;
 }
 
-h4,
+h4 {
+    color: rgb(118, 210, 13);
+}
+
 .panel-title {
-    color: #ffffff;
+    color: hsl(300, 7%, 12%);
 }
 
 h2,
 #currentTime {
     text-align: center;
-    color: #ffffff;
+    color: rgb(118, 210, 13);
     font-size: 20px;
 }
