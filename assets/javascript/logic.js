@@ -36,21 +36,14 @@ $(document).ready(function() {
         firstTrainTime = $("#firstTrainTimeInput").val().trim();
         frequency = $("#frequencyInput").val().trim();
 
-        console.log("TrainName: " + trainName);
-        console.log("Destination: " + destination);
-        console.log("FirstTrainTime: " + firstTrainTime);
-        console.log("Frequency: " + frequency);
-
         // store initial data to Firebase database.
-        database
-            .ref()
-            .push({
-                trainName: trainName,
-                destination: destination,
-                firstTrainTime: firstTrainTime,
-                frequency: frequency,
-                timeAdded: firebase.database.ServerValue.TIMESTAMP
-            });
+        database.ref().push({
+            trainName: trainName,
+            destination: destination,
+            firstTrainTime: firstTrainTime,
+            frequency: frequency,
+            timeAdded: firebase.database.ServerValue.TIMESTAMP
+        });
         $("input").val("");
         return false;
     });
@@ -58,13 +51,16 @@ $(document).ready(function() {
     //------------------ firebase watcher on value event ------------------------------
     database.ref().on("child_added", function(childSnapshot) {
 
-            //log everything that's coming out of childSnapshot data
-            var firstTrainTime = childSnapshot.val().firstTrainTime;
-            var frequency = parseInt(childSnapshot.val().frequency);
+            // store everything that's coming out of childSnapshot data to a var
+            var childItem = childSnapshot.val();
+            // store each data from childSnapshot to a new var
+            var firstTrainTime = childItem.firstTrainTime;
+            var frequency = parseInt(childItem.frequency);
             var firstTimeConverted = moment(firstTrainTime, "HH:mm");
 
             // get the difference in time from first time train arrival
             var diffTime = moment().diff(moment(firstTimeConverted));
+
             // diff time in minutes
             var diffTimeInMinutes = moment().diff(moment(firstTimeConverted), "minutes");
 
@@ -85,8 +81,8 @@ $(document).ready(function() {
             }
 
             // update HTML train table with new trainName, destination, frequency, nextArrival and minutesAway
-            $("#trainTable").append("<tr><td>" + childSnapshot.val().trainName + "</td>" +
-                "<td>" + childSnapshot.val().destination + "</td>" +
+            $("#trainTable").append("<tr><td>" + childItem.trainName + "</td>" +
+                "<td>" + childItem.destination + "</td>" +
                 "<td>" + "Every " + frequency + " min" + "</td>" +
                 "<td>" + nextArrival + "</td>" +
                 "<td>" + minutesAway + " minutes away" + "</td></tr>");
